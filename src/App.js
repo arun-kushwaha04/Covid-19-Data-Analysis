@@ -1,10 +1,11 @@
-import React from 'react';
+import React ,{useState} from 'react';
 import {useData} from './getStateData';
 import {stack,scaleOrdinal,scalePow,format,scaleBand,max} from 'd3';
 import {AxisTop} from './stackedData/AxisTop'
 import {Bar} from './stackedData/Bar'
 import {AxisLeft} from './stackedData/AxisLeft'
 import {Legend} from './stackedData/Legend'
+import {ToolTip} from './stackedData/ToolTip'
 
 const height = window.innerHeight*2.5;
 const width = window.innerWidth - 100;
@@ -19,6 +20,13 @@ const xAxisTickFormat = tickValue => siFormat(tickValue).replace('G', 'B');
 
 function App() {
   const data = useData();
+  const [toolTipData,setToolTipData] = useState({
+    State:"India",
+    Confirmed:11111,
+    Value:1111,
+    DeathRatio:0.1,
+    RecoveryRate:0.9
+  })
 
   if(!data) {
     return <pre>Loading...</pre>;
@@ -82,6 +90,9 @@ function App() {
       <Legend
         fields={fields}
         colorScale={colorScale}
+      />
+      <ToolTip
+        toolTipData={toolTipData}
       />
     </>
   );

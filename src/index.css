@@ -35,3 +35,36 @@ code {
 .legend-section circle {
     cursor: pointer;
 }
+
+.tooltip {
+    position: absolute;
+    height: 200px;
+    width: 175px;
+    top: 1rem;
+    left: 2rem;
+    background-color: black;
+    border-radius: 1rem;
+    border: 2px solid white;
+    box-sizing: border-box;
+    color: white;
+    padding: 1rem;
+}
+
+.tooltip header {
+    margin-bottom: 0.5rem;
+}
+
+.underline-tooltip {
+    width: 5rem;
+    height: 2px;
+    background-color: teal;
+}
+
+.tooltip-info div {
+    height: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0;
+    margin: 0.2rem auto;
+}
