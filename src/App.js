@@ -1,6 +1,9 @@
 import React from 'react';
 import {useData} from './getStateData';
-import {stack,scaleOrdinal,scalePow,format,scaleBand,max,scaleLog} from 'd3';
+import {stack,scaleOrdinal,scalePow,format,scaleBand,max} from 'd3';
+import {AxisTop} from './stackedData/AxisTop'
+import {Bar} from './stackedData/Bar'
+import {AxisLeft} from './stackedData/AxisLeft'
 function App() {
   const data = useData();
 
@@ -63,63 +66,31 @@ const yTickOffSet = yScale.bandwidth()/2 + 0.5;
 
 const siFormat = format('.2s');
 const xAxisTickFormat = tickValue => siFormat(tickValue).replace('G', 'B');
+
+ 
   
   return (
     <svg height={height} width={width}>
       <g transform={`translate(${margin.left},${margin.top})`}>
         
 
-        {
-            xScale.ticks().map((tickValue,i) => (
-              <>
-              {(i%2) && <g className="xtick" transform={`translate(${xScale(tickValue)},0)`} >
-                <line y2={innerHeight} />
-                <text        
-                  style={{ textAnchor: 'middle' }}    
-                  dy="0.31em"              
-                  transform={`translate(0,-20),rotate(-90)`}                
-                >       
-                  {xAxisTickFormat(tickValue)}
-                </text>
-              </g>}
-              </>
-            ))
+        <AxisTop
+          xScale={xScale}
+          innerHeight={innerHeight}
+          xAxisTickFormat={xAxisTickFormat}
+        />
 
-        }
+        <Bar
+          stackedData={stackedData}
+          xScale={xScale}
+          yScale={yScale}
+          colorScale={colorScale}
+        />
 
-        {stackedData.map((field,i) => {
-          return (field.map((data,j) => {
-            // console.log(data.data[fields[i]])
-            // console.log((data.data.State),xScale(`${xAccessor(data.data)}`))
-            // console.log(data[0],xScale(data[0]))
-            return (
-              <rect
-                x={xScale(data[0])}
-                y={yScale(data.data.State)}
-                height = {yScale.bandwidth()}
-                width={xScale(data[1]-data[0])}
-                fill={colorScale(i)}
-               
-              />
-            )
-          }))
-        })}
-        {
-            yScale.domain().map((tickValue,i) => (
-              <g
-                className="tick"
-                key={`bottomeAxis${i}`}
-                transform={`translate(-10,0)`}
-              >
-                <text 
-                  style={{ textAnchor: 'end' }} 
-                  dy={yTickOffSet} y={yScale(tickValue)}
-                >   
-                  {tickValue}    
-                </text>
-              </g>
-            ))
-        }
+        <AxisLeft
+          yScale={yScale}
+          yTickOffSet={yTickOffSet}
+        />
       </g>
     </svg>
   );
