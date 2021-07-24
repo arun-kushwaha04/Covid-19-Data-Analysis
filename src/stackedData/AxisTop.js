@@ -1,7 +1,7 @@
 export const AxisTop = ({xScale,innerHeight,xAxisTickFormat}) =>
 { return xScale.ticks().map((tickValue,i) => (
    <>
-   {(i%2) && <g className="xtick" transform={`translate(${xScale(tickValue)},0)`} >
+   {!(i%3) && <g className="xtick" transform={`translate(${xScale(tickValue)},0)`} >
      <line y2={innerHeight} />
      <text        
        style={{ textAnchor: 'middle' }}    

@@ -9,16 +9,29 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-svg {
-    border: 1px solid red;
-}
-
 .xtick line {
     stroke: #C0C0BB;
 }
 
 .tick text,
-.xtick text {
+.xtick text,
+.legend-section text {
     fill: #635F5D;
     font-size: 1rem;
+    cursor: default;
+}
+
+.legend-section {
+    height: 200px;
+    width: 175px;
+    background-color: lightgrey;
+    border-radius: 1rem;
+    position: absolute;
+    padding: 1rem 0.5rem;
+    top: 10rem;
+    right: 2rem;
+}
+
+.legend-section circle {
+    cursor: pointer;
 }

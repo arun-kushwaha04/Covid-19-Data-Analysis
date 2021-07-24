@@ -7,7 +7,8 @@ export const AxisLeft = ({yScale,yTickOffSet}) =>{
      >
        <text 
          style={{ textAnchor: 'end' }} 
-         dy={yTickOffSet} y={yScale(tickValue)}
+         transform={`translate(0,${yTickOffSet})`}
+         dy="0.32em" y={yScale(tickValue)}
        >   
          {tickValue}    
        </text>
