@@ -13,11 +13,12 @@ svg {
     border: 1px solid red;
 }
 
-.tick line {
+.xtick line {
     stroke: #C0C0BB;
 }
 
-.tick text {
+.tick text,
+.xtick text {
     fill: #635F5D;
     font-size: 1rem;
 }
