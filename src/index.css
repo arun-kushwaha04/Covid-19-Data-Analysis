@@ -22,8 +22,8 @@ code {
 }
 
 .legend-section {
-    height: 200px;
-    width: 175px;
+    height: 220px;
+    width: 190px;
     background-color: lightgrey;
     border-radius: 1rem;
     position: fixed;
@@ -72,4 +72,13 @@ code {
 .tooltip-info div h6 {
     font-weight: 400;
     font-size: 0.8rem;
+}
+
+.decrease-opacity {
+    opacity: 0;
+}
+
+.circle-selected {
+    stroke: black;
+    stroke-width: 2px;
 }

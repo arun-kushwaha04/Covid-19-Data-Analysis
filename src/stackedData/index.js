@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { stack, scaleOrdinal, scalePow, format, scaleBand, max } from "d3";
+import { stack, scalePow, format, scaleBand, max } from "d3";
 import { AxisTop } from "./AxisTop";
 import { Bar } from "./Bar";
 import { AxisLeft } from "./AxisLeft";
@@ -15,7 +15,7 @@ const innerHeight = height - margin.top - margin.bottom;
 
 const siFormat = format(".2s");
 const xAxisTickFormat = (tickValue) => siFormat(tickValue).replace("G", "B");
-const fields = [
+const initalFields = [
   "Delta_Deaths",
   "Delta_Recovered",
   "Delta_Confirmed",
@@ -24,17 +24,18 @@ const fields = [
   "Deaths",
   "Recovered",
 ];
-const colorScale = scaleOrdinal().range([
-  "#BD2D28",
-  "teal",
-  "purple",
-  "yellow",
-  "orange",
-  "#ff1919",
-  "green",
-]);
+const colorScale = {
+  Delta_Deaths: "#BD2D28",
+  Delta_Recovered: "teal",
+  Delta_Confirmed: "purple",
+  Migrated_Other: "yellow",
+  Active: "orange",
+  Deaths: "#ff1919",
+  Recovered: "green",
+};
 
 export const BarChart = ({ data }) => {
+  const [toolTipVisibility, setToolTipVisibility] = useState(false);
   const [toolTipData, setToolTipData] = useState({
     State: "India",
     Confirmed: 11111,
@@ -42,9 +43,10 @@ export const BarChart = ({ data }) => {
     DeathRatio: 0.1,
     RecoveryRate: 0.9,
   });
+  const [fields, setFields] = useState(initalFields);
 
-  const stackedData = useMemo(() => stack().keys(fields)(data), [data]);
-  console.log(stackedData);
+  const stackedData = useMemo(() => stack().keys(fields)(data), [data, fields]);
+  // console.log(stackedData);
 
   const yScale = useMemo(() => {
     const yDomain = data.map((d) => d.State);
@@ -52,12 +54,9 @@ export const BarChart = ({ data }) => {
   }, [data]);
 
   const xScale = useMemo(() => {
-    console.log("xScale rendering");
-    const maxXDomain = max(stackedData, (d) =>
-      max(d, (d2) => d2.data.Confirmed)
-    );
+    const maxXDomain = max(stackedData, (d) => max(d, (d2) => d2[0] + d2[1]));
     const xDomain = [0, maxXDomain];
-    return scalePow().exponent(0.1).range([0, innerWidth]).domain(xDomain);
+    return scalePow().exponent(0.4).range([0, innerWidth]).domain(xDomain);
   }, [stackedData]);
 
   const yTickOffSet = yScale.bandwidth() / 2;
@@ -84,12 +83,21 @@ export const BarChart = ({ data }) => {
             yScale={yScale}
             colorScale={colorScale}
             setToolTipData={setToolTipData}
+            setToolTipVisibility={setToolTipVisibility}
           />
           <AxisLeft yScale={yScale} yTickOffSet={yTickOffSet} />
         </g>
       </svg>
-      <Legend fields={fields} colorScale={colorScale} />
-      <ToolTip toolTipData={toolTipData} />
+      <Legend
+        initalFields={initalFields}
+        fields={fields}
+        setFields={setFields}
+        colorScale={colorScale}
+      />
+      <ToolTip
+        toolTipData={toolTipData}
+        toolTipVisibility={toolTipVisibility}
+      />
     </>
   );
 };

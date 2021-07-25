@@ -7,7 +7,8 @@ const ToolTipDiv = ({ master, value }) => {
     </div>
   );
 };
-export const ToolTip = ({ toolTipData }) => {
+export const ToolTip = ({ toolTipData, toolTipVisibility }) => {
+  if (!toolTipVisibility) return null;
   return (
     <section className="tooltip">
       <header>{toolTipData.State}</header>

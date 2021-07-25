@@ -8,6 +8,7 @@ function App() {
   if (!data) {
     return <pre>Loading...</pre>;
   }
+  console.log("Rendering App component");
 
   // const d = data[10];
   // console.log(d);

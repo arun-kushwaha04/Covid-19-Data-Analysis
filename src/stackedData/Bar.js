@@ -23,17 +23,20 @@ export const Bar = ({
   yScale,
   colorScale,
   setToolTipData,
+  setToolTipVisibility,
 }) => {
   return stackedData.map((field, i) => {
     return field.map((data, j) => {
+      // if (i === 6) return null;
       return (
         <rect
           x={xScale(data[0])}
           y={yScale(data.data.State)}
           height={yScale.bandwidth()}
-          width={xScale(data[1] - data[0])}
-          fill={colorScale(i)}
-          onMouseOver={() =>
+          width={xScale(data[1]) - xScale(data[0])}
+          fill={colorScale[fields[i]]}
+          onMouseOver={() => {
+            setToolTipVisibility(true);
             setToolTipFun(
               setToolTipData,
               data.data.State,
@@ -43,8 +46,11 @@ export const Bar = ({
               Math.round((data.data.Recovered / data.data.Confirmed) * 100) /
                 100,
               fields[i]
-            )
-          }
+            );
+          }}
+          onMouseOut={() => {
+            setToolTipVisibility(false);
+          }}
         />
       );
     });
