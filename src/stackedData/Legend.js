@@ -38,8 +38,21 @@ export const Legend = ({ initalFields, fields, setFields, colorScale }) => {
                   if (!flag) {
                     temp.push(val);
                   }
+                  temp.sort((a, b) => {
+                    let x, y;
+                    initalFields.forEach((element, i) => {
+                      if (element === a) x = i;
+                      if (element === b) y = i;
+                    });
+                    if (x < y) {
+                      return -1;
+                    }
+                    if (x > y) {
+                      return 1;
+                    }
+                    return 0;
+                  });
                   setFields(temp);
-                  console.log(fields);
                 }}></circle>
               <text transform={`translate(25,0)`} dy="0.32em">
                 {field}

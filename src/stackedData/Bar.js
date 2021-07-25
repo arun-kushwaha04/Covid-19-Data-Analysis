@@ -1,3 +1,4 @@
+import { format } from "d3";
 const setToolTipFun = (
   setToolTipData,
   State,
@@ -40,11 +41,12 @@ export const Bar = ({
             setToolTipFun(
               setToolTipData,
               data.data.State,
-              data.data.Confirmed,
-              data[1] - data[0],
-              Math.round((data.data.Deaths / data.data.Confirmed) * 100) / 100,
-              Math.round((data.data.Recovered / data.data.Confirmed) * 100) /
-                100,
+              format(",")(data.data.Confirmed),
+              format(",")(data[1] - data[0]),
+              Math.round((data.data.Deaths / data.data.Confirmed) * 1000) /
+                1000,
+              Math.round((data.data.Recovered / data.data.Confirmed) * 1000) /
+                1000,
               fields[i]
             );
           }}
