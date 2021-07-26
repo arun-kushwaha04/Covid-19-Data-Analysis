@@ -18,9 +18,9 @@ export const Marks = ({
           strokeLinejoin="round"
           strokeLinecap="round"
           d={line()
-            .curve(curveBasis)
             .x((d) => xScale(new Date(d.dateymd)))
-            .y((d) => yScale(yValue(d, value)))(data)}
+            .y((d) => yScale(yValue(d, value)))
+            .curve(curveBasis)(data)}
         />
         <circle
           key={d.id}

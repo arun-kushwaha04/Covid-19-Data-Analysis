@@ -5,7 +5,7 @@ import { AxisBottom } from "./AxisBottom";
 import { AxisLeft } from "./AxisLeft";
 import { Marks } from "./Marks";
 import "./index.css";
-// import ReactDropdown from "react-dropdown";
+import ReactDropdown from "react-dropdown";
 
 const attributes = [
   { value: "intensity", label: "Intensity" },
@@ -14,9 +14,9 @@ const attributes = [
   { value: "impact", label: "Impact" },
 ];
 
-const height = window.innerHeight;
-const width = window.innerWidth;
-const margin = { top: "50", right: "350", bottom: "200", left: "150" };
+const height = window.innerHeight - 10;
+const width = window.innerWidth - 10;
+const margin = { top: "50", right: "150", bottom: "70", left: "150" };
 
 const innerWidth = width - margin.left - margin.right;
 const innerHeight = height - margin.top - margin.bottom;
@@ -55,19 +55,19 @@ const ScatterPlot = () => {
       .range([a, b]);
 
   const xAxisTickFormat = timeFormat("%d-%B-%Y");
-  console.log(yScale.domain(), yScale.range(), yScale(0));
+  console.log(yScale.domain(), yScale.range());
   return (
     <>
-      {/* <div className="menus-container">
+      <div className="menus-container">
         <span className="dropdown-label">Y</span>
         <ReactDropdown
           options={attributes}
           value={value}
           onChange={({ value }) => setValue(value)}
         />
-      </div> */}
+      </div>
       <svg height={height} width={width} className="graph">
-        <g transform={`translate(${margin.left},${margin.left})`}>
+        <g transform={`translate(${margin.left},${margin.top})`}>
           <AxisBottom
             xScale={xScale}
             innerHeight={innerHeight}
@@ -83,13 +83,13 @@ const ScatterPlot = () => {
             {yAxisLabel}
           </text>
           <AxisLeft yScale={yScale} innerWidth={innerWidth} tickOffset={5} />
-          {/* <text
+          <text
             className="axis-label"
             x={innerWidth / 2}
             y={innerHeight + xAxisLabelOffset}
             textAnchor="middle">
             {xAxisLabel}
-          </text> */}
+          </text>
           <Marks
             value={value}
             data={list}

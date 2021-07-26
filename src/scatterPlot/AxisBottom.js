@@ -10,7 +10,7 @@ export const AxisBottom = ({
         className="tick"
         key={`bottomeAxis${i}`}
         transform={`translate(${xScale(tickValue)},0)`}>
-        {/* <line y2={innerHeight} /> */}
+        <line y2={innerHeight} />
         <text
           style={{ textAnchor: "middle" }}
           dy=".71em"
