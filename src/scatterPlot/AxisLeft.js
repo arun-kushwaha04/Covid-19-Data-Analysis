@@ -9,9 +9,11 @@ export const AxisLeft = ({
     let tickValue = 0;
     let i = 0;
     let arr = [];
-    while (tickValue < yScale.domain()[1] / 10) {
+    while (tickValue < yScale.domain()[1]) {
       tickValue = Math.pow(10, i);
       i++;
+      if (tickValue === 1) tickValue = 0;
+      tickValue = Math.min(tickValue, yScale.domain()[1]);
       arr.push(tickValue);
     }
     return arr.map((tickValue) => {

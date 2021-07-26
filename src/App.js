@@ -1,14 +1,16 @@
 import React from "react";
 import { useData } from "./getStateData";
+import { useData as useList } from "./scatterPlot/getData";
 import { BarChart } from "./stackedData/index";
 import ScatterPlot from "./scatterPlot/scatterPlot";
 
 function App() {
-  // const data = useData();
+  const data = useData();
+  const list = useList();
 
-  // if (!data) {
-  //   return <pre>Loading...</pre>;
-  // }
+  if (!data && !list) {
+    return <pre>Loading...</pre>;
+  }
   console.log("Rendering App component");
 
   // const d = data[10];
@@ -19,7 +21,7 @@ function App() {
   return (
     <>
       {/* <BarChart data={data} /> */}
-      <ScatterPlot />
+      <ScatterPlot list={list} />
     </>
   );
 }
