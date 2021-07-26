@@ -9,7 +9,8 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
-.xtick line {
+.xtick line,
+.tick line {
     stroke: #c0c0bb;
 }
 
