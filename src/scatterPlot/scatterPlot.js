@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { useData } from "./getData";
-import { scaleLinear, timeFormat, max, scaleTime, scaleSymlog } from "d3";
+import {
+  scaleLinear,
+  timeFormat,
+  max,
+  scaleTime,
+  scaleSymlog,
+  format,
+} from "d3";
 import { AxisBottom } from "./AxisBottom";
 import { AxisLeft } from "./AxisLeft";
 import { Marks } from "./Marks";
@@ -8,31 +15,29 @@ import "./index.css";
 import ReactDropdown from "react-dropdown";
 
 const attributes = [
-  { value: "intensity", label: "Intensity" },
-  { value: "likelihood", label: "Likelihood" },
-  { value: "relevance", label: "Relevance" },
-  { value: "impact", label: "Impact" },
+  { label: "Confirmed", value: "totalconfirmed" },
+  { label: "Deaths", value: "totaldeceased" },
+  { label: "Recovered", value: "totalrecovered" },
 ];
 
-const height = window.innerHeight - 10;
+const height = window.innerHeight - 100;
 const width = window.innerWidth - 10;
 const margin = { top: "50", right: "150", bottom: "70", left: "150" };
 
 const innerWidth = width - margin.left - margin.right;
 const innerHeight = height - margin.top - margin.bottom;
-const xAxisLabelOffset = 50;
-const yAxisLabelOffset = 45;
+const yAxisLabelOffset = 80;
+
+const siFormat = format(".2s");
+const yAxisTickFormat = (tickValue) => siFormat(tickValue).replace("G", "B");
 
 const ScatterPlot = () => {
   const list = useData();
-
   const [value, setValue] = useState("totalconfirmed");
+  const [showLogScale, setShowLogScale] = useState(false);
 
   if (!list) return <pre>Loading ...</pre>;
-  const yValue = (d, value) => d["totalconfirmed"];
-  const xAxisLabel = "Year";
-  const yAxisLabel = "Cases";
-  console.log(list[list.length - 1].dateymd);
+
   const xValue = (d) => {
     return d.dateymd;
   };
@@ -44,18 +49,29 @@ const ScatterPlot = () => {
     .range([0, innerWidth])
     .nice();
 
-  const yScale = scaleSymlog()
-    .domain([0, max(list, (d) => d.totalconfirmed)])
+  const yValue = (d, value) => d[value];
+  const yAxisLabel = "Cases";
+
+  const yScaleLinear = scaleLinear()
+    .domain([0, max(list, (d) => d[value])])
     .range([innerHeight, 0])
     .nice();
 
-  const scaleRadius = (a, b) =>
-    scaleLinear()
-      .domain([0, max(list, (d) => d.totalconfirmed)])
-      .range([a, b]);
+  const yScaleLog = scaleSymlog()
+    .domain([0, max(list, (d) => d[value])])
+    .range([innerHeight, 0])
+    .nice();
 
   const xAxisTickFormat = timeFormat("%d-%B-%Y");
-  console.log(yScale.domain(), yScale.range());
+
+  const Checkbox = ({ label, value, onChange }) => {
+    return (
+      <label>
+        <input type="checkbox" checked={value} onChange={onChange} />
+        {label}
+      </label>
+    );
+  };
   return (
     <>
       <div className="menus-container">
@@ -64,6 +80,11 @@ const ScatterPlot = () => {
           options={attributes}
           value={value}
           onChange={({ value }) => setValue(value)}
+        />
+        <Checkbox
+          label="Logarithmic Scale"
+          value={showLogScale}
+          onChange={() => setShowLogScale(!showLogScale)}
         />
       </div>
       <svg height={height} width={width} className="graph">
@@ -82,22 +103,21 @@ const ScatterPlot = () => {
             }) rotate(-90)`}>
             {yAxisLabel}
           </text>
-          <AxisLeft yScale={yScale} innerWidth={innerWidth} tickOffset={5} />
-          <text
-            className="axis-label"
-            x={innerWidth / 2}
-            y={innerHeight + xAxisLabelOffset}
-            textAnchor="middle">
-            {xAxisLabel}
-          </text>
+          <AxisLeft
+            logScale={showLogScale}
+            yScale={showLogScale ? yScaleLog : yScaleLinear}
+            innerWidth={innerWidth}
+            tickOffset={-5}
+            tickFormatter={yAxisTickFormat}
+          />
+
           <Marks
             value={value}
             data={list}
             xScale={xScale}
-            yScale={yScale}
+            yScale={showLogScale ? yScaleLog : yScaleLinear}
             xValue={xValue}
             yValue={yValue}
-            circleRadius={scaleRadius(5, 5)}
           />
         </g>
       </svg>
